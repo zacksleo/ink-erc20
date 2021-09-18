@@ -41,7 +41,7 @@ mod erc20 {
     }
 
     #[derive(Debug, PartialEq, Eq, Clone, scale::Encode, scale::Decode)]
-    #[cfg_attr(feature="std", derive(scale_info::TypeInfo))]
+    #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
     pub enum Error {
         InsufficientBalance,
         InsufficientApproval,
@@ -146,5 +146,72 @@ mod erc20 {
 
         /// Imports `ink_lang` so we can use `#[ink::test]`.
         use ink_lang as ink;
+
+        #[ink::test]
+        fn new_test() {
+            let contract = Erc20::new(100);
+
+            // Transfer event triggered during initial construction.
+            let emitted_events = ink_env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+
+            assert_eq!(contract.total_supply(), 100);
+            assert_eq!(contract.balance_of(AccountId::from([0x1; 32])), 100);
+            assert_eq!(contract.balance_of(AccountId::from([0x2; 32])), 0);
+            assert_eq!(
+                contract.allowance(AccountId::from([0x1; 32]), AccountId::from([0x2; 32])),
+                0
+            );
+        }
+
+        #[ink::test]
+        fn transfer_test() {
+            let mut contract = Erc20::new(100);
+            let accounts = ink_env::test::default_accounts::<ink_env::DefaultEnvironment>()
+                .expect("Cannot get accounts");
+
+            assert_eq!(contract.transfer(accounts.bob, 50), Ok(()));
+
+            // 用户余额判断
+            assert_eq!(contract.balance_of(accounts.bob), 50);
+            assert_eq!(contract.balance_of(accounts.alice), 50);
+
+            // 判断转账事件已发出
+            let emitted_events = ink_env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(2, emitted_events.len());
+
+            // 余额不足检查
+            assert_eq!(
+                contract.transfer(accounts.eve, 100),
+                Err(Error::InsufficientBalance)
+            );
+        }
+
+        #[ink::test]
+        fn approve_test() {
+            let mut contract = Erc20::new(100);
+            let accounts = ink_env::test::default_accounts::<ink_env::DefaultEnvironment>()
+                .expect("Cannot get accounts");
+
+            assert_eq!(contract.approve(accounts.bob, 50), Ok(()));
+            // 判断Approval金额
+            assert_eq!(contract.allowance(accounts.alice, accounts.bob), 50);
+
+            // 判断Approval事件已发出
+            let emitted_events = ink_env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(2, emitted_events.len());
+        }
+
+        #[ink::test]
+        fn transfer_from_test() {
+            let mut contract = Erc20::new(100);
+            let accounts = ink_env::test::default_accounts::<ink_env::DefaultEnvironment>()
+                .expect("Cannot get accounts");
+            // 判断授权金额不足
+            assert_eq!(
+                contract.transfer_from(accounts.bob, accounts.charlie, 50),
+                Err(Error::InsufficientApproval)
+            );
+        }
     }
 }

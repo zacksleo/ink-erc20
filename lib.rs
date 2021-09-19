@@ -110,7 +110,7 @@ mod erc20 {
             value: Balance,
         ) -> Result<()> {
             let caller = Self::env().caller();
-            let allowance = self.allowance(caller, from);
+            let allowance = self.allowance(from, caller);
             if allowance < value {
                 return Err(Error::InsufficientApproval);
             }

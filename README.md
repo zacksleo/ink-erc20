@@ -10,16 +10,22 @@
 
 ## 运行
 
-![build2.png](.screenshots/contract-deploy.png)
+### Alice transfer to Dave
 
-## alice approve to bob
+![build2.png](.screenshots/alice-transfer-to-dave.png)
+
+### Balance of Dave
+
+![build2.png](.screenshots/balance-of-dave.png)
+
+### Alice approve to Bob
 
 ![](.screenshots/alice-approve-to-bob.png)
 
-## bob transfer from alice to charlie
+### Bob transfer from Alice to Charlie
 
 ![](.screenshots/bob-transfer-from-alice-to-charlie.png)
 
-## balance of charlie
+### Balance of Charlie
 
 ![](.screenshots/balance-of-charlie.png)

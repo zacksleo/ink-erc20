@@ -2,24 +2,24 @@
 
 ## 构建
 
-![build.png](.screenshort/build.png)
+![build.png](.screenshots/build.png)
 
 ## 测试
 
-![build2.png](.screenshort/test.png)
+![build2.png](.screenshots/test.png)
 
 ## 运行
 
-![build2.png](.screenshort/contract-deploy.png)
+![build2.png](.screenshots/contract-deploy.png)
 
 ## alice approve to bob
 
-![](.screenshort/alice-approve-to-bob.png)
+![](.screenshots/alice-approve-to-bob.png)
 
 ## bob transfer from alice to charlie
 
-![](.screenshort/bob-transfer-from-alice-to-charlie.png)
+![](.screenshots/bob-transfer-from-alice-to-charlie.png)
 
 ## balance of charlie
 
-![](.screenshort/balance-of-charlie.png)
+![](.screenshots/balance-of-charlie.png)
